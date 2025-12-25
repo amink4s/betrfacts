@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --betr-pink: #e6007e;
+  --betr-cyan: #00f3ff;
+  --betr-dark: #000000;
+  --betr-card-bg: #0a0a0a;
+}
+
+body {
+  background-color: var(--betr-dark);
+  color: white;
+  font-family: 'Inter', system-ui, sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Centering the entire app for mobile/mini-app view */
+#app-root {
+  width: 100%;
+  max-width: 450px; /* Standard mobile width */
+  min-height: 100vh;
+  position: relative;
+  border-left: 1px solid rgba(0, 243, 255, 0.1);
+  border-right: 1px solid rgba(0, 243, 255, 0.1);
+}
+
+@layer components {
+  .betr-card {
+    @apply bg-[#0a0a0a] border border-[#00f3ff]/30 rounded-2xl overflow-hidden mb-4;
+  }
+  
+  .betr-header-pink {
+    @apply bg-[#e6007e] text-black text-center py-4 font-black uppercase tracking-tight text-xl;
+  }
+
+  .betr-button-pink {
+    @apply bg-[#e6007e] text-white font-bold py-3 px-6 rounded-xl hover:opacity-90 transition-all text-sm uppercase;
+  }
+
+  .betr-button-cyan {
+    @apply border border-[#00f3ff] text-[#00f3ff] font-bold py-2 px-4 rounded-xl hover:bg-[#00f3ff]/10 transition-all text-xs uppercase;
+  }
+}
+
+/* Smooth Scrolling */
+html { scroll-behavior: smooth; }
