@@ -12,10 +12,9 @@ export default function Home() {
       try {
         const res = await fetch("/api/rounds/list");
         const data = await res.json();
-        // The API should return them sorted backward (latest first)
         setRounds(data);
       } catch (err) {
-        console.error("Fetch error:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -24,27 +23,25 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       {/* Header Section */}
       <div className="flex justify-between items-center px-2">
-        <h2 className="text-white font-bold text-lg tracking-tight">RECENT ROUNDS</h2>
-        <Link href="/add" className="text-[#e6007e] text-xs font-bold uppercase hover:underline">
-          Submit +
+        <h2 className="text-white font-bold text-lg tracking-tight uppercase">Archive</h2>
+        <Link href="/add" className="betr-button-pink !py-1 !px-4 !rounded-full text-[10px]">
+          + Add Round
         </Link>
       </div>
 
       {loading ? (
-        <div className="h-[420px] flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#00f3ff]"></div>
+        <div className="flex justify-center py-20 animate-pulse text-[#00f3ff] font-mono text-xs">
+          FETCHING_GIF_DATA...
         </div>
       ) : (
-        /* The 2-Row Horizontal Scroll Container */
-        <div className="flex overflow-x-auto pb-8 snap-x scrollbar-hide">
-          <div className="grid grid-flow-col grid-rows-2 gap-4 auto-cols-max">
-            {rounds.map((round: any) => (
-              <RoundCard key={round.id} round={round} />
-            ))}
-          </div>
+        /* Two-Column Grid */
+        <div className="grid grid-cols-2 gap-3 px-1">
+          {rounds.map((round: any) => (
+            <RoundCard key={round.id} round={round} />
+          ))}
         </div>
       )}
     </div>
