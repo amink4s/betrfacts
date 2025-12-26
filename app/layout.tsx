@@ -4,8 +4,29 @@ import "@/app/globals.css";
 import FactsTicker from "@/components/Ticker";
 
 export const metadata: Metadata = {
-  title: "Betr Facts",
-  description: "The Wiki for Betrmint",
+  title: "BetrFacts",
+  description: "Facts about the betrmint rounds provided by the community",
+  openGraph: {
+    title: "BetrFacts",
+    description: "Facts about the betrmint rounds provided by the community",
+    images: ["https://betrfacts.vercel.app/image.png"],
+  },
+  other: {
+    "fc:frame": JSON.stringify({
+      version: "1",
+      imageUrl: "https://betrfacts.vercel.app/image.png",
+      button: {
+        title: "BetrFacts",
+        action: {
+          type: "launch_frame",
+          name: "BetrFacts",
+          url: "https://betrfacts.vercel.app",
+          splashImageUrl: "https://betrfacts.vercel.app/splash.png",
+          splashBackgroundColor: "#000000",
+        },
+      },
+    }),
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
