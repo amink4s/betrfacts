@@ -48,6 +48,34 @@ body {
     @apply border border-[#00f3ff] text-[#00f3ff] font-bold py-2 px-4 rounded-xl hover:bg-[#00f3ff]/10 transition-all text-xs uppercase;
   }
 }
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
+@layer base {
+  body {
+    @apply bg-black text-white antialiased;
+    /* Prevent horizontal bounce on mobile */
+    overflow-x: hidden;
+  }
+}
 
+/* Custom glow for the borders */
+.border-glow-pink {
+  box-shadow: 0 0 8px rgba(230, 0, 126, 0.3);
+}
+
+.border-glow-cyan {
+  box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+}
 /* Smooth Scrolling */
 html { scroll-behavior: smooth; }
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 18s linear infinite;
+}

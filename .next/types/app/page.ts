@@ -1,4 +1,4 @@
-// File: /Users/Amin 1/Desktop/projects/farcaster-apps/betrfacts/app/page.tsx
+// File: C:\Users\DTFLAND\Documents\Amin\project\betrfacts-1\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
