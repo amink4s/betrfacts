@@ -14,9 +14,10 @@
         "splashImageUrl": "https://betrfacts.vercel.app/splash.png",
         "splashBackgroundColor": "#000000",
         "webhookUrl": "https://betrfacts.vercel.app/api/webhook",
-        "subtitle": "betrmint round facts",
+        "subtitle": "betrmint rounds facts",
         "description": "facts about the betrmint rounds provided by the community",
         "primaryCategory": "utility",
+        "tagline": "betrmint rounds facts",
         "screenshotUrls": [
           "https://betrfacts.vercel.app/screenshot1.png"
         ],
