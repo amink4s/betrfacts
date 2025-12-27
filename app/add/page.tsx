@@ -1,140 +1,132 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import sdk from "@farcaster/frame-sdk";
 
 export default function AddRound() {
-  const [userFid, setUserFid] = useState<number | null>(null);
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     roundNumber: "",
     artistUsername: "",
+    artistFid: "",
     imageUrl: "",
     nftLink: "",
-    tokenSymbol: "",
+    tokenSymbol: "$BETR",
   });
 
-  useEffect(() => {
-    const init = async () => {
-      const context = await sdk.context;
-      if (context?.user) setUserFid(context.user.fid);
-    };
-    init();
-  }, []);
-
-  const handleSubmit = async () => {
-    if (!formData.roundNumber || !formData.imageUrl) return alert("Fill required fields");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
-    
+
     try {
-      const res = await fetch("/api/rounds", {
+      const res = await fetch("/api/rounds/add", {
         method: "POST",
-        body: JSON.stringify({ ...formData, proposerFid: userFid || 0 }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
+
       if (res.ok) {
-        alert("Submitted for review!");
-        window.location.href = "/";
+        router.push("/");
+        router.refresh();
+      } else {
+        alert("Error submitting data. Check all fields.");
       }
-    } catch (e) {
-      alert("Error submitting");
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="space-y-8 pb-10">
-      <div className="border-l-2 border-betr-red pl-4">
-        <h2 className="text-2xl font-black italic uppercase text-white">Contribute_Data</h2>
-        <p className="text-xs text-white/50">Submit a missing round to earn points.</p>
-      </div>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <Link href="/" className="text-[#00f3ff] text-[10px] font-bold uppercase tracking-widest">
+        ← Cancel
+      </Link>
 
-      {/* Preview Section */}
-      <div className="space-y-2">
-        <span className="text-[10px] font-mono text-betr-blue uppercase">Live Preview:</span>
-        <div className="w-48 mx-auto border border-betr-blue shadow-neon-blue bg-black overflow-hidden">
-          <div className="aspect-square bg-white/5 relative">
-            {formData.imageUrl ? (
-              <img src={formData.imageUrl} className="w-full h-full object-cover" alt="preview" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-[10px] text-white/20">IMAGE_URL_REQUIRED</div>
-            )}
-            <div className="absolute top-2 left-2 bg-betr-red text-white text-[10px] px-2 font-bold">
-              #{formData.roundNumber || "???"}
+      <div className="rounded-[1.5rem] border border-[#e6007e]/30 overflow-hidden bg-[#0a0a0a] shadow-[0_0_15px_rgba(230,0,126,0.1)]">
+        <div className="bg-[#e6007e] py-4 text-center">
+          <h2 className="text-black font-black uppercase text-sm tracking-tighter italic">Contribute_Round_Data</h2>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-[9px] text-white/40 uppercase font-bold ml-1">Round #</label>
+              <input 
+                required
+                type="number"
+                placeholder="271"
+                className="w-full bg-black border border-[#00f3ff]/30 rounded-xl p-3 text-sm text-white outline-none focus:border-[#00f3ff] transition-all"
+                onChange={(e) => setFormData({...formData, roundNumber: e.target.value})}
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[9px] text-white/40 uppercase font-bold ml-1">Support Token</label>
+              <input 
+                required
+                type="text"
+                placeholder="$BETR"
+                className="w-full bg-black border border-[#00f3ff]/30 rounded-xl p-3 text-sm text-white outline-none focus:border-[#00f3ff]"
+                onChange={(e) => setFormData({...formData, tokenSymbol: e.target.value})}
+              />
             </div>
           </div>
-          <div className="p-2 text-xs">
-            <div className="text-betr-blue font-bold">@{formData.artistUsername || "artist"}</div>
-            <div className="text-[9px] text-white/40 uppercase font-mono">{formData.tokenSymbol || "TOKEN"} Support</div>
-          </div>
-        </div>
-      </div>
 
-      {/* Form Fields */}
-      <div className="grid gap-4 bg-white/5 p-6 border border-white/10 shadow-xl">
-        <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-white/60">Round #</label>
+            <label className="text-[9px] text-white/40 uppercase font-bold ml-1">Artist @Username</label>
             <input 
-              type="number" 
-              className="w-full bg-black border border-white/20 p-2 text-sm text-betr-blue focus:border-betr-blue outline-none transition-all"
-              placeholder="270"
-              onChange={(e) => setFormData({...formData, roundNumber: e.target.value})}
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-white/60">Artist @</label>
-            <input 
-              type="text" 
-              className="w-full bg-black border border-white/20 p-2 text-sm text-betr-blue focus:border-betr-blue outline-none"
-              placeholder="username"
+              required
+              type="text"
+              placeholder="vince.eth"
+              className="w-full bg-black border border-[#00f3ff]/30 rounded-xl p-3 text-sm text-white outline-none focus:border-[#00f3ff]"
               onChange={(e) => setFormData({...formData, artistUsername: e.target.value})}
             />
           </div>
-        </div>
 
-        <div className="space-y-1">
-          <label className="text-[10px] uppercase font-bold text-white/60">Direct Image URL</label>
-          <input 
-            type="text" 
-            className="w-full bg-black border border-white/20 p-2 text-sm text-betr-blue focus:border-betr-blue outline-none"
-            placeholder="https://i.imgur.com/..."
-            onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-          />
-        </div>
+          <div className="space-y-1">
+            <label className="text-[9px] text-white/40 uppercase font-bold ml-1">Artist FID (for Farcaster link)</label>
+            <input 
+              required
+              type="number"
+              placeholder="1234"
+              className="w-full bg-black border border-[#00f3ff]/30 rounded-xl p-3 text-sm text-white outline-none focus:border-[#00f3ff]"
+              onChange={(e) => setFormData({...formData, artistFid: e.target.value})}
+            />
+          </div>
 
-        <div className="space-y-1">
-          <label className="text-[10px] uppercase font-bold text-white/60">Supporting Token (e.g. $BETR)</label>
-          <input 
-            type="text" 
-            className="w-full bg-black border border-white/20 p-2 text-sm text-betr-blue focus:border-betr-blue outline-none"
-            placeholder="$FACTS"
-            onChange={(e) => setFormData({...formData, tokenSymbol: e.target.value})}
-          />
-        </div>
+          <div className="space-y-1">
+            <label className="text-[9px] text-white/40 uppercase font-bold ml-1">GIF / Image URL</label>
+            <input 
+              required
+              type="url"
+              placeholder="https://betrmint.fun/images/..."
+              className="w-full bg-black border border-[#00f3ff]/30 rounded-xl p-3 text-sm text-white outline-none focus:border-[#00f3ff]"
+              onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
+            />
+          </div>
 
-        <div className="space-y-1">
-          <label className="text-[10px] uppercase font-bold text-white/60">NFT / Zora Link</label>
-          <input 
-            type="text" 
-            className="w-full bg-black border border-white/20 p-2 text-sm text-betr-blue focus:border-betr-blue outline-none"
-            placeholder="https://zora.co/..."
-            onChange={(e) => setFormData({...formData, nftLink: e.target.value})}
-          />
-        </div>
+          <div className="space-y-1">
+            <label className="text-[9px] text-white/40 uppercase font-bold ml-1">Zora / NFT Link</label>
+            <input 
+              required
+              type="url"
+              placeholder="https://zora.co/..."
+              className="w-full bg-black border border-[#00f3ff]/30 rounded-xl p-3 text-sm text-white outline-none focus:border-[#00f3ff]"
+              onChange={(e) => setFormData({...formData, nftLink: e.target.value})}
+            />
+          </div>
 
-        <button 
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full bg-betr-red text-white font-black py-4 uppercase italic tracking-widest hover:shadow-neon-red transition-all mt-4 disabled:opacity-50"
-        >
-          {loading ? "TRANSMITTING..." : "Submit for Review"}
-        </button>
+          <button 
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#e6007e] text-white font-black py-4 rounded-2xl uppercase tracking-tighter mt-4 shadow-lg active:scale-95 transition-all disabled:opacity-50"
+          >
+            {loading ? "TRANSMITTING..." : "PUBLISH TO ARCHIVE"}
+          </button>
+        </form>
       </div>
-
-      <Link href="/" className="block text-center text-[10px] text-white/40 uppercase hover:text-white tracking-widest">
-        ← Abort & Return
-      </Link>
     </div>
   );
 }
