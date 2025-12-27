@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { sdk } from "@farcaster/miniapp-sdk";
+import React from "react";
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import FactsTicker from "@/components/Ticker";
+import FarcasterReady from "@/components/FarcasterReady";
 
 export const metadata: Metadata = {
   title: "BetrFacts",
@@ -33,21 +33,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    // Call Farcaster ready when the UI is ready to display
-    (async () => {
-      try {
-        await sdk.actions.ready();
-      } catch (e) {
-        // Optionally log error, but do not block rendering
-        console.error("Farcaster ready() failed", e);
-      }
-    })();
-  }, []);
-
   return (
     <html lang="en">
       <body className="antialiased">
+        <FarcasterReady />
         <div id="app-root" className="bg-black shadow-2xl">
           <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-[#00f3ff]/10">
             <FactsTicker />
