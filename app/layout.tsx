@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { sdk } from "@farcaster/miniapp-sdk";
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import FactsTicker from "@/components/Ticker";
@@ -30,6 +31,18 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    // Call Farcaster ready when the UI is ready to display
+    (async () => {
+      try {
+        await sdk.actions.ready();
+      } catch (e) {
+        // Optionally log error, but do not block rendering
+        console.error("Farcaster ready() failed", e);
+      }
+    })();
+  }, []);
+
   return (
     <html lang="en">
       <body className="antialiased">

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@farcaster/frame-sdk": "^0.0.17",
+    "@farcaster/miniapp-sdk": "^0.2.1",
     "@neondatabase/serverless": "^0.10.4",
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
